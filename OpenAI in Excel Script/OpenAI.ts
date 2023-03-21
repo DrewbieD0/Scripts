@@ -6,7 +6,6 @@ async function main(workbook: ExcelScript.Workbook) {
 
     // get worksheet info
     const sheet = workbook.getWorksheet("Prompt");
-    // the ask
     const mytext = sheet.getRange("B2").getValue();
 
     // useful if if we get more than one row back
@@ -42,7 +41,7 @@ async function main(workbook: ExcelScript.Workbook) {
     // Parse the response as JSON
   const json: { choices: { text:(string | boolean | number )}[] } = await response.json();
 
-    // Get the answer - i.e. output
+    // Get the generated text
     const text: (string | boolean | number) = json.choices[0].text;
 
     // Output the generated text
@@ -52,23 +51,21 @@ async function main(workbook: ExcelScript.Workbook) {
    
    output.setValue(text);
 
-  const cell = sheet.getRange("B4");
+  
+   const cell = sheet.getRange("B4");
 
-  // Split the cell contents by new line
+   // Split the cell contents by new line
 
-  const arr = cell.getValue().toString().split("\n");
+   const arr = cell.getValue().toString().split("\n");
 
-  const newcell = result.getRange("A1");
+   const newcell = result.getRange("A1");
 
-  var offset = 0;
-  // console.log (arr)
-
-  for (let i = 0; i < arr.length; i++) {
+   var offset = 0;
+  
+   for (let i = 0; i < arr.length; i++) {
     // Write the value to the next cell
-   
-    if (arr[i].length > 0) {
+   if (arr[i].length > 0) {
       newcell.getOffsetRange(offset, 0).setValue(arr[i]);
-    
       offset++;
     }
   }
@@ -76,7 +73,6 @@ async function main(workbook: ExcelScript.Workbook) {
  // console.log(offset)
   if (offset > 1) {
     sheet.getRange("B3").setValue("Check 'Result' sheet to get answers separated by multiple rows")
-
   }
 }
 
